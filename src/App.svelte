@@ -1,53 +1,59 @@
 <script lang="ts">
-	let url = "https://random-d.uk/api/randomimg"
+	let url = "https://picsum.photos/500/600.webp?blur=1"
 
 	/** Utility function to fetch JSON from a url. */
-	async function randomJSONAPI(url: string): Promise<any> {
-		const response = await fetch(url);
-		return await response.json()
-	}
+	const randomJSONAPI = (url: string): Promise<any> => fetch(url).then(data => data.json())
 	
 	/** Represents a named factory that can generate URLs of animals. */
 	interface AnimalFactory {
+		/** The name of the animal */
 		name: string;
-		usage: () => Promise<string>;
+		/** The factory for generating a random URL of the animal */
+		url: () => Promise<string>;
+		/** If the animal should be shown on the slideshow */
 		enabled: boolean;
 	}
 
 	const randomAnimals: AnimalFactory[] = [
 		{
 			name: "fox",
-			usage: () => randomJSONAPI("https://randomfox.ca/floof/").then(data => data.image),
+			url: () => randomJSONAPI("https://randomfox.ca/floof/").then(data => data.image),
 			enabled: true
 		},
 		{
 			name: "bunny",
-			usage: () => randomJSONAPI("https://api.bunnies.io/v2/loop/random/?media=gif")
+			url: () => randomJSONAPI("https://api.bunnies.io/v2/loop/random/?media=gif")
 				.then(data => data.media.gif),
 			enabled: true
 		},
 		{
 			name: "dog",
-			usage: () => randomJSONAPI("https://dog.ceo/api/breeds/image/random")
+			url: () => randomJSONAPI("https://dog.ceo/api/breeds/image/random")
 				.then(data => data.message),
 			enabled: true
 		},
 		{
 			name: "duck",
-			usage: async () => "https://random-d.uk/api/randomimg?" + new Date(),
+			url: async () => "https://random-d.uk/api/randomimg?" + new Date(),
 			enabled: true
 		},
 		{
 			name: "cat",
-			usage: async () => "https://cataas.com/cat?" + new Date(),
+			url: async () => "https://cataas.com/cat?" + new Date(),
 			enabled: true
 		}
 	]
 
-	$: selectedAnimals = randomAnimals.filter(it => it.enabled)
+	const randomAnimal = async (): Promise<string> => {
+		
+		const selectedAnimals = randomAnimals.filter(it => it.enabled)
 
-	const randomAnimal = async () => await selectedAnimals[~~(Math.random() * selectedAnimals.length)].usage()
+		if (selectedAnimals.length == 0) return "https://picsum.photos/500/600.webp?blur=1"
 
+		return await selectedAnimals[~~(Math.random() * selectedAnimals.length)].url()
+	}
+
+	/** How much time to take before grabbing another image from the factory. */
 	let timeInterval = 3000
 
 	async function showAnimal() {
@@ -64,7 +70,7 @@
 	<div id="settings">
 		{#each randomAnimals as animal}
 			<div class="animal">
-				<input type="checkbox" name="animal" bind:checked={animal.enabled} value={animal.name}/>{animal.name}
+				{animal.name}<input type="checkbox" name="animal" bind:checked={animal.enabled} value={animal.name}/>
 			</div>
 		{/each}
 		timing: <input type="number" min="500" max="50000" bind:value={timeInterval}>
@@ -74,7 +80,7 @@
 <style lang="scss">
 
 	#settings {
-		background: rgba(0, 0, 0, 0.5);
+		background: rgba(0, 0, 0, 0.65);
 		color: white;
 		position: fixed;
 		top: 10px;
@@ -89,7 +95,7 @@
 			display: inline-block;
 
 			input {
-				margin-right: 3px;
+				margin-left: 3px;
 			}
 
 		}
@@ -100,7 +106,7 @@
 		position: absolute;
 		width: 100vw;
 		height: 100vh;
-		background-color: gray;
+		background-color: rgb(50, 50, 50);
 		background-size: contain;
 		background-repeat: no-repeat;
 		background-position: center;
