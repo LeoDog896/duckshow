@@ -1,20 +1,47 @@
 <script lang="ts">
+	let url = "https://random-d.uk/api/randomimg"
 
-	let url = "https://random-d.uk/api/1.jpg"
-
-	async function fetchAndSet(): Promise<string> {
-		let response = await fetch("https://random-d.uk/api/v2/list?format=json")
-		let json = await response.json()
-
-		return json.url
+	async function randomJSONAPI(url: string): Promise<any> {
+		const response = await fetch(url);
+		return await response.json()
 	}
+	
+
+	const randomAnimals: (() => Promise<string>)[] = [
+		async () => {
+			const data = await randomJSONAPI("https://randomfox.ca/floof/")
+			return data.image
+		},
+		async () => {
+			const data = await randomJSONAPI("https://api.bunnies.io/v2/loop/random/?media=gif")
+			return data.media.gif
+		},
+		async () => {
+			const data = await randomJSONAPI("https://dog.ceo/api/breeds/image/random")
+			return data.message
+		},
+		async () => "https://random-d.uk/api/randomimg?" + new Date()
+	]
+
+	const randomAnimal = async () => await randomAnimals[~~(Math.random() * randomAnimals.length)]()
+
+	setInterval(async () => url = await randomAnimal(), 3000)
+
 </script>
 
 <main>
-	<img src={url} alt="Duck" width="300"/>
-	<button on:click={() => fetchAndSet().then(newUrl => url = newUrl)}>New Duck</button>
+	<div id="bigParent" style="background-image: url('{url}')"></div>
 </main>
 
 <style>
 
+	#bigParent {
+		position: absolute;
+		width: 100vw;
+		height: 100vh;
+		background-color: gray;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
 </style>
