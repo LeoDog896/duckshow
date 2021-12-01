@@ -55,6 +55,8 @@
 
 	const randomAnimal = async () => await selectedAnimals[~~(Math.random() * selectedAnimals.length)].usage()
 
+	let timeInterval = 3000
+
 	setInterval(async () => url = await randomAnimal(), 3000)
 
 </script>
@@ -67,6 +69,7 @@
 				<input type="checkbox" name="animal" bind:checked={animal.enabled} value={animal.name}/>{animal.name}
 			</div>
 		{/each}
+		timing: <input bind:value={timeInterval}>
 	</div>
 </main>
 
