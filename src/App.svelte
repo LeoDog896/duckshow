@@ -1,14 +1,17 @@
 <script lang="ts">
 	let url = "https://random-d.uk/api/randomimg"
 
+	/** Utility function to fetch JSON from a url. */
 	async function randomJSONAPI(url: string): Promise<any> {
 		const response = await fetch(url);
 		return await response.json()
 	}
 	
+	/** Represents a named factory that can generate URLs of animals. */
 	interface AnimalFactory {
 		name: string;
-		usage: () => Promise<string>
+		usage: () => Promise<string>;
+		enabled: boolean;
 	}
 
 	const randomAnimals: AnimalFactory[] = [
@@ -17,33 +20,40 @@
 			usage: async () => {
 				const data = await randomJSONAPI("https://randomfox.ca/floof/")
 				return data.image
-			}
+			},
+			enabled: true
 		},
 		{
 			name: "bunny",
 			usage: async () => {
 				const data = await randomJSONAPI("https://api.bunnies.io/v2/loop/random/?media=gif")
 				return data.media.gif
-			}
+			},
+			enabled: true
 		},
 		{
 			name: "dog",
 			usage: async () => {
 				const data = await randomJSONAPI("https://dog.ceo/api/breeds/image/random")
 				return data.message
-			}
+			},
+			enabled: true
 		},
 		{
 			name: "duck",
-			usage: async () => "https://random-d.uk/api/randomimg?" + new Date()
+			usage: async () => "https://random-d.uk/api/randomimg?" + new Date(),
+			enabled: true
 		},
 		{
 			name: "cat",
-			usage: async () => "https://cataas.com/cat?" + new Date()
+			usage: async () => "https://cataas.com/cat?" + new Date(),
+			enabled: true
 		}
 	]
 
-	const randomAnimal = async () => await randomAnimals[~~(Math.random() * randomAnimals.length)].usage()
+	$: selectedAnimals = randomAnimals.filter(it => it.enabled)
+
+	const randomAnimal = async () => await selectedAnimals[~~(Math.random() * selectedAnimals.length)].usage()
 
 	setInterval(async () => url = await randomAnimal(), 3000)
 
@@ -51,9 +61,37 @@
 
 <main>
 	<div id="bigParent" style="background-image: url('{url}')"></div>
+	<div id="settings">
+		{#each randomAnimals as animal}
+			<div class="animal">
+				<input type="checkbox" name="animal" bind:checked={animal.enabled} value={animal.name}/>{animal.name}
+			</div>
+		{/each}
+	</div>
 </main>
 
-<style>
+<style lang="scss">
+
+	#settings {
+		background: rgba(0, 0, 0, 0.5);
+		color: white;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		text-align: center;
+
+		.animal {
+			margin: 10px;
+			display: inline-block;
+
+			input {
+				margin-right: 3px;
+			}
+
+		}
+
+	}
 
 	#bigParent {
 		position: absolute;
