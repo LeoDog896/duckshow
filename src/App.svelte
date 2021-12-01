@@ -68,15 +68,17 @@
 <main>
 	<div id="bigParent" style="background-image: url('{url}')"></div>
 	<div id="settings">
-		{#each randomAnimals as animal}
+		{#each randomAnimals as animal, i}
 			<div class="animal">
-				<label>
-					<span>{animal.name}</span>
-					<input type="checkbox" name="animal" bind:checked={animal.enabled} value={animal.name}/>
-				</label>
+				<span
+					tabindex={i + 1}
+					on:click={() => animal.enabled = !animal.enabled}
+					on:keyup={event => { if (event.key == "Enter") animal.enabled = !animal.enabled }}
+					class={animal.enabled ? "enabled" : "disabled"}
+				>{animal.name}</span>
 			</div>
 		{/each}
-		<label><span>timing</span> <input type="number" min="500" max="50000" bind:value={timeInterval}></label>
+		<label><span>timing</span> <input tabindex={randomAnimals.length + 1} type="number" min="500" max="50000" bind:value={timeInterval}></label>
 	</div>
 </main>
 
@@ -119,6 +121,15 @@
 			margin: 10px;
 			display: inline-block;
 			color: white;
+			cursor: pointer;
+
+			span.enabled {
+				color: white;
+			}
+
+			span.disabled {
+				color: rgb(200, 200, 200);
+			}
 		}
 
 	}
