@@ -6,25 +6,44 @@
 		return await response.json()
 	}
 	
+	interface AnimalFactory {
+		name: string;
+		usage: () => Promise<string>
+	}
 
-	const randomAnimals: (() => Promise<string>)[] = [
-		async () => {
-			const data = await randomJSONAPI("https://randomfox.ca/floof/")
-			return data.image
+	const randomAnimals: AnimalFactory[] = [
+		{
+			name: "fox",
+			usage: async () => {
+				const data = await randomJSONAPI("https://randomfox.ca/floof/")
+				return data.image
+			}
 		},
-		async () => {
-			const data = await randomJSONAPI("https://api.bunnies.io/v2/loop/random/?media=gif")
-			return data.media.gif
+		{
+			name: "bunny",
+			usage: async () => {
+				const data = await randomJSONAPI("https://api.bunnies.io/v2/loop/random/?media=gif")
+				return data.media.gif
+			}
 		},
-		async () => {
-			const data = await randomJSONAPI("https://dog.ceo/api/breeds/image/random")
-			return data.message
+		{
+			name: "dog",
+			usage: async () => {
+				const data = await randomJSONAPI("https://dog.ceo/api/breeds/image/random")
+				return data.message
+			}
 		},
-		async () => "https://random-d.uk/api/randomimg?" + new Date(),
-		async () => "https://cataas.com/cat?" + new Date()
+		{
+			name: "duck",
+			usage: async () => "https://random-d.uk/api/randomimg?" + new Date()
+		},
+		{
+			name: "cat",
+			usage: async () => "https://cataas.com/cat?" + new Date()
+		}
 	]
 
-	const randomAnimal = async () => await randomAnimals[~~(Math.random() * randomAnimals.length)]()
+	const randomAnimal = async () => await randomAnimals[~~(Math.random() * randomAnimals.length)].usage()
 
 	setInterval(async () => url = await randomAnimal(), 3000)
 
