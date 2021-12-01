@@ -70,10 +70,13 @@
 	<div id="settings">
 		{#each randomAnimals as animal}
 			<div class="animal">
-				{animal.name}<input type="checkbox" name="animal" bind:checked={animal.enabled} value={animal.name}/>
+				<label>
+					<span>{animal.name}</span>
+					<input type="checkbox" name="animal" bind:checked={animal.enabled} value={animal.name}/>
+				</label>
 			</div>
 		{/each}
-		timing: <input type="number" min="500" max="50000" bind:value={timeInterval}>
+		<label><span>timing</span> <input type="number" min="500" max="50000" bind:value={timeInterval}></label>
 	</div>
 </main>
 
@@ -81,7 +84,7 @@
 
 	#settings {
 		background: rgba(0, 0, 0, 0.65);
-		color: white;
+		box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.52);
 		position: fixed;
 		top: 10px;
 		left: 50%;
@@ -89,21 +92,39 @@
 		border-radius: 10px;
 		transform: translateX(-50%);
 		text-align: center;
+		color: white;
+
+		input {
+			background: rgba(0, 0, 0, 0);
+			font-family: inherit;
+			font-size: inherit;
+			padding: 3px;
+			box-sizing: border-box;
+			border: 0px solid;
+			border-bottom: 1px solid white;
+			color: white;
+			text-align: center;
+			border-radius: 2px;
+			margin-left: 3px;
+			vertical-align: middle;
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
 
 		.animal {
 			margin: 10px;
 			display: inline-block;
-
-			input {
-				margin-left: 3px;
-			}
-
+			color: white;
 		}
 
 	}
 
 	#bigParent {
-		position: absolute;
+		position: fixed;
 		width: 100vw;
 		height: 100vh;
 		background-color: rgb(50, 50, 50);
