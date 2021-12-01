@@ -57,7 +57,12 @@
 
 	let timeInterval = 3000
 
-	setInterval(async () => url = await randomAnimal(), 3000)
+	async function showAnimal() {
+		url = await randomAnimal()
+		setTimeout(showAnimal, timeInterval)
+	}
+
+	showAnimal()
 
 </script>
 
@@ -69,7 +74,7 @@
 				<input type="checkbox" name="animal" bind:checked={animal.enabled} value={animal.name}/>{animal.name}
 			</div>
 		{/each}
-		timing: <input bind:value={timeInterval}>
+		timing: <input type="number" min="500" max="50000" bind:value={timeInterval}>
 	</div>
 </main>
 
@@ -79,9 +84,11 @@
 		background: rgba(0, 0, 0, 0.5);
 		color: white;
 		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
+		top: 10px;
+		left: 50%;
+		right: 0;
+		border-radius: 10px;
+		transform: translateX(-50%);
 		text-align: center;
 
 		.animal {
