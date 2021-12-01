@@ -17,26 +17,19 @@
 	const randomAnimals: AnimalFactory[] = [
 		{
 			name: "fox",
-			usage: async () => {
-				const data = await randomJSONAPI("https://randomfox.ca/floof/")
-				return data.image
-			},
+			usage: () => randomJSONAPI("https://randomfox.ca/floof/").then(data => data.image),
 			enabled: true
 		},
 		{
 			name: "bunny",
-			usage: async () => {
-				const data = await randomJSONAPI("https://api.bunnies.io/v2/loop/random/?media=gif")
-				return data.media.gif
-			},
+			usage: () => randomJSONAPI("https://api.bunnies.io/v2/loop/random/?media=gif")
+				.then(data => data.media.gif),
 			enabled: true
 		},
 		{
 			name: "dog",
-			usage: async () => {
-				const data = await randomJSONAPI("https://dog.ceo/api/breeds/image/random")
-				return data.message
-			},
+			usage: () => randomJSONAPI("https://dog.ceo/api/breeds/image/random")
+				.then(data => data.message),
 			enabled: true
 		},
 		{
