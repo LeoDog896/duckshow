@@ -20,7 +20,8 @@
 			const data = await randomJSONAPI("https://dog.ceo/api/breeds/image/random")
 			return data.message
 		},
-		async () => "https://random-d.uk/api/randomimg?" + new Date()
+		async () => "https://random-d.uk/api/randomimg?" + new Date(),
+		async () => "https://cataas.com/cat?" + new Date()
 	]
 
 	const randomAnimal = async () => await randomAnimals[~~(Math.random() * randomAnimals.length)]()
