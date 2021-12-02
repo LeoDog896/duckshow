@@ -1,93 +1,12 @@
 <script lang="ts">
+
+	import { randomAnimals } from "./sources"
+
 	let url = "https://picsum.photos/500/600.webp?blur=1"
-
-	/** Utility function to fetch JSON from a url. */
-	const fetchURL = (url: string): Promise<any> => fetch(url).then(data => data.json())
-	
-	/** Represents a named factory that can generate URLs of animals. */
-	interface AnimalFactory {
-		/** The name of the animal */
-		name: string;
-		/** The factory for generating a random URL of the animal */
-		url: () => Promise<string>;
-		/** If the animal should be shown on the slideshow */
-		enabled: boolean;
-	}
-
-	let randomAnimals: AnimalFactory[] = [
-		{
-			name: "fox",
-			url: () => fetchURL("https://randomfox.ca/floof/").then(data => data.image),
-			enabled: true
-		},
-		{
-			name: "bunny",
-			url: () => fetchURL("https://api.bunnies.io/v2/loop/random/?media=gif")
-				.then(data => data.media.gif),
-			enabled: true
-		},
-		{
-			name: "dog",
-			url: () => fetchURL("https://dog.ceo/api/breeds/image/random")
-				.then(data => data.message),
-			enabled: true
-		},
-		{
-			name: "duck",
-			url: async () => "https://random-d.uk/api/randomimg?" + Date.now(),
-			enabled: true
-		},
-		{
-			name: "cat",
-			url: async () => "https://cataas.com/cat?" + Date.now(),
-			enabled: true
-		},
-		{
-			name: "raccoon",
-			url: () => fetchURL("https://some-random-api.ml/img/raccoon")
-				.then(data => data.link),
-			enabled: true
-		},
-		{
-			name: "kangaroo",
-			url: () => fetchURL("https://some-random-api.ml/img/kangaroo")
-				.then(data => data.link),
-			enabled: true
-		},
-		{
-			name: "bird",
-			url: () => fetchURL("https://some-random-api.ml/img/birb")
-				.then(data => data.link),
-			enabled: true
-		},
-		{
-			name: "panda",
-			url: () => fetchURL("https://some-random-api.ml/img/panda")
-				.then(data => data.link),
-			enabled: true
-		},
-		{
-			name: "koala",
-			url: () => fetchURL("https://some-random-api.ml/img/koala")
-				.then(data => data.link),
-			enabled: true
-		},
-		{
-			name: "red panda",
-			url: () => fetchURL("https://some-random-api.ml/img/red_panda")
-				.then(data => data.link),
-			enabled: true
-		},
-		{
-			name: "generic",
-			url: async () => "https://picsum.photos/500/600?" + Date.now(),
-			enabled: false
-		}
-	]
 
 	const randomAnimal = (): Promise<string> | string => {
 		
-		const selectedAnimals = randomAnimals.filter(it => it.enabled)
+		const selectedAnimals = $randomAnimals.filter(it => it.enabled)
 
 		if (selectedAnimals.length == 0) return "https://picsum.photos/500/600.webp?blur=1"
 
@@ -99,7 +18,7 @@
 
 	function keyPress(event: KeyboardEvent, index: number) {
 		if (event.key == "Enter" && event.shiftKey) {
-			randomAnimals = randomAnimals.map(item => {
+			$randomAnimals = $randomAnimals.map(item => {
 				if (item == randomAnimals[index]) return Object.assign({}, item, { enabled: true })
 				
 				return Object.assign({}, item, { enabled: false })
@@ -123,7 +42,7 @@
 
 <div id="bigParent" style="background-image: url('{url}')"></div>
 <div id="settings">
-	{#each randomAnimals as animal, i}
+	{#each $randomAnimals as animal, i}
 		<div class="animal">
 			<span
 				tabindex={i + 1}
@@ -133,7 +52,7 @@
 			>{animal.name}</span>
 		</div>
 	{/each}
-	<label><input tabindex={randomAnimals.length + 1} bind:value={timeInterval}><span>s</span></label>
+	<label><input tabindex={$randomAnimals.length + 1} bind:value={timeInterval}><span>s</span></label>
 </div>
 
 <style lang="scss">
