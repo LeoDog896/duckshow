@@ -52,7 +52,10 @@
 			>{animal.name}</span>
 		</div>
 	{/each}
-	<label><input tabindex={$randomAnimals.length + 1} bind:value={timeInterval}><span>s</span></label>
+	<label>
+		<input tabindex={$randomAnimals.length + 1} bind:value={timeInterval}>
+		<span>s</span>
+	</label>
 </div>
 
 <style lang="scss">
