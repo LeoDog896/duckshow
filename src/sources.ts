@@ -39,13 +39,13 @@ export let sources: Writable<AnimalFactory[]> = writable([
 	},
 	{
 		name: "duck",
-		url: async () => "https://random-d.uk/api/randomimg?" + Date.now(),
+		url: async () => "https://random-d.uk/api/randomimg?" + new Date(),
 		enabled: true,
 		provider: "https://random-d.uk/"
 	},
 	{
 		name: "cat",
-		url: async () => "https://cataas.com/cat?" + Date.now(),
+		url: async () => "https://cataas.com/cat?" + new Date(),
 		enabled: true,
 		provider: "https://cataas.com/"
 	},
@@ -93,7 +93,7 @@ export let sources: Writable<AnimalFactory[]> = writable([
 	},
 	{
 		name: "generic",
-		url: async () => "https://picsum.photos/500/600?" + Date.now(),
+		url: async () => "https://picsum.photos/500/600?" + new Date(),
 		enabled: false,
 		provider: "https://picsum.photos/"
 	}
