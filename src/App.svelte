@@ -61,7 +61,7 @@
 <style lang="scss">
 
 	#settings {
-		background: rgba(0, 0, 0, 0.65);
+		background: rgba(0, 0, 0, 0.85);
 		box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.52);
 		position: fixed;
 		top: 10px;
