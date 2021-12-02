@@ -71,6 +71,12 @@
 			url: () => fetchURL("https://some-random-api.ml/img/koala")
 				.then(data => data.link),
 			enabled: true
+		},
+		{
+			name: "red panda",
+			url: () => fetchURL("https://some-random-api.ml/img/red_panda")
+				.then(data => data.link),
+			enabled: true
 		}
 	]
 
@@ -123,6 +129,7 @@
 		transform: translateX(-50%);
 		text-align: center;
 		color: white;
+		width: 80vw;
 
 		input {
 			background: rgba(0, 0, 0, 0);
