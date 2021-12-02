@@ -14,7 +14,7 @@
 		enabled: boolean;
 	}
 
-	const randomAnimals: AnimalFactory[] = [
+	let randomAnimals: AnimalFactory[] = [
 		{
 			name: "fox",
 			url: () => fetchURL("https://randomfox.ca/floof/").then(data => data.image),
@@ -34,12 +34,12 @@
 		},
 		{
 			name: "duck",
-			url: async () => "https://random-d.uk/api/randomimg?" + new Date(),
+			url: async () => "https://random-d.uk/api/randomimg?" + Date.now(),
 			enabled: true
 		},
 		{
 			name: "cat",
-			url: async () => "https://cataas.com/cat?" + new Date(),
+			url: async () => "https://cataas.com/cat?" + Date.now(),
 			enabled: true
 		},
 		{
@@ -77,6 +77,11 @@
 			url: () => fetchURL("https://some-random-api.ml/img/red_panda")
 				.then(data => data.link),
 			enabled: true
+		},
+		{
+			name: "generic",
+			url: async () => "https://picsum.photos/500/600?" + Date.now(),
+			enabled: false
 		}
 	]
 
@@ -91,6 +96,21 @@
 
 	/** How much time to take before grabbing another image from the factory. */
 	let timeInterval = 3
+
+	function keyPress(event: KeyboardEvent, index: number) {
+		if (event.key == "Enter" && event.shiftKey) {
+			randomAnimals = randomAnimals.map(item => {
+				if (item == randomAnimals[index]) return Object.assign({}, item, { enabled: true })
+				
+				return Object.assign({}, item, { enabled: false })
+ 			})
+			return
+		}
+
+		if (event.key == "Enter") {
+			randomAnimals[index].enabled = !randomAnimals[index].enabled
+		}
+	}
 
 	async function showAnimal() {
 		url = await randomAnimal()
@@ -108,7 +128,7 @@
 			<span
 				tabindex={i + 1}
 				on:click={() => animal.enabled = !animal.enabled}
-				on:keydown={event => { if (event.key == "Enter") animal.enabled = !animal.enabled }}
+				on:keydown={event => keyPress(event, i)}
 				class={animal.enabled ? "enabled" : "disabled"}
 			>{animal.name}</span>
 		</div>
