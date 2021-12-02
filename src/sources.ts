@@ -16,7 +16,7 @@ interface AnimalFactory {
 	provider: string;
 }
 
-export let randomAnimals: Writable<AnimalFactory[]> = writable([
+export let sources: Writable<AnimalFactory[]> = writable([
 	{
 		name: "fox",
 		url: () => fetchURL("https://randomfox.ca/floof/").then(data => data.image),

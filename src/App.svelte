@@ -1,25 +1,15 @@
 <script lang="ts">
 
-	import { randomAnimals } from "./sources"
-
-	let url = "https://picsum.photos/500/600.webp?blur=1"
-
-	const randomAnimal = (): Promise<string> | string => {
-		
-		const selectedAnimals = $randomAnimals.filter(it => it.enabled)
-
-		if (selectedAnimals.length == 0) return "https://picsum.photos/500/600.webp?blur=1"
-
-		return selectedAnimals[~~(Math.random() * selectedAnimals.length)].url()
-	}
+	import { sources } from "./sources"
+	import { url, randomURL } from "./url"
 
 	/** How much time to take before grabbing another image from the factory. */
 	let timeInterval = 3
 
 	function keyPress(event: KeyboardEvent, index: number) {
 		if (event.key == "Enter" && event.shiftKey) {
-			$randomAnimals = $randomAnimals.map(item => {
-				if (item == randomAnimals[index]) return Object.assign({}, item, { enabled: true })
+			$sources = $sources.map(item => {
+				if (item == sources[index]) return Object.assign({}, item, { enabled: true })
 				
 				return Object.assign({}, item, { enabled: false })
  			})
@@ -27,12 +17,12 @@
 		}
 
 		if (event.key == "Enter") {
-			randomAnimals[index].enabled = !randomAnimals[index].enabled
+			sources[index].enabled = !sources[index].enabled
 		}
 	}
 
 	async function showAnimal() {
-		url = await randomAnimal()
+		$url = await randomURL()
 		setTimeout(showAnimal, Math.max(Math.min(timeInterval * 1000, 60000), 500))
 	}
 
@@ -42,7 +32,7 @@
 
 <div id="bigParent" style="background-image: url('{url}')"></div>
 <div id="settings">
-	{#each $randomAnimals as animal, i}
+	{#each $sources as animal, i}
 		<div class="animal">
 			<span
 				tabindex={i + 1}
@@ -53,7 +43,7 @@
 		</div>
 	{/each}
 	<label>
-		<input tabindex={$randomAnimals.length + 1} bind:value={timeInterval}>
+		<input tabindex={$sources.length + 1} bind:value={timeInterval}>
 		<span>s</span>
 	</label>
 </div>
