@@ -44,8 +44,32 @@
 		},
 		{
 			name: "raccoon",
-			url: () => fetchURL("https://some-random-api.ml/animal/raccoon")
-				.then(data => data.image),
+			url: () => fetchURL("https://some-random-api.ml/img/raccoon")
+				.then(data => data.link),
+			enabled: true
+		},
+		{
+			name: "kangaroo",
+			url: () => fetchURL("https://some-random-api.ml/img/kangaroo")
+				.then(data => data.link),
+			enabled: true
+		},
+		{
+			name: "bird",
+			url: () => fetchURL("https://some-random-api.ml/img/birb")
+				.then(data => data.link),
+			enabled: true
+		},
+		{
+			name: "panda",
+			url: () => fetchURL("https://some-random-api.ml/img/panda")
+				.then(data => data.link),
+			enabled: true
+		},
+		{
+			name: "koala",
+			url: () => fetchURL("https://some-random-api.ml/img/koala")
+				.then(data => data.link),
 			enabled: true
 		}
 	]
