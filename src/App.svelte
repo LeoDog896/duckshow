@@ -1,19 +1,11 @@
 <script lang="ts">
 
-	import { url, randomURL } from "./url"
+	import { imageData } from "./url"
 	import Settings from "./Settings.svelte"
-	import { millis } from "./time"
-
-	async function showAnimal() {
-		$url = await randomURL()
-		setTimeout(showAnimal, $millis)
-	}
-
-	showAnimal()
 
 </script>
 
-<div id="bigParent" style="background-image: url('{$url}')"></div>
+<div id="bigParent" style="background-image: url('{$imageData.url}')"></div>
 <Settings/>
 <style lang="scss">
 	#bigParent {
