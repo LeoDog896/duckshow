@@ -5,7 +5,7 @@
 	function keyPress(event: KeyboardEvent, index: number) {
 		if (event.key == "Enter" && event.shiftKey) {
 			$sources = $sources.map(item => {
-				if (item == sources[index]) return Object.assign({}, item, { enabled: true })
+				if (item == $sources[index]) return Object.assign({}, item, { enabled: true })
 				
 				return Object.assign({}, item, { enabled: false })
  			})
@@ -13,7 +13,7 @@
 		}
 
 		if (event.key == "Enter") {
-			sources[index].enabled = !sources[index].enabled
+			$sources[index].enabled = !$sources[index].enabled
 		}
 	}
 </script>

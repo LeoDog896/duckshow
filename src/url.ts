@@ -42,7 +42,7 @@ export const randomURLOrCache = async () : Promise<ImageData> => {
 	const filteredURLCache = get(availableURLs).filter(it => selectedAnimalNames.includes(it.name))
 
 	if (filteredURLCache.length > 0) {
-		availableURLs.set(get(availableURLs).filter((_, i) => i != 0)))
+		availableURLs.set(get(availableURLs).filter((_, i) => i != 0))
 		return filteredURLCache[0]
 	}
 
