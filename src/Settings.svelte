@@ -40,11 +40,11 @@
 			>{source.name}</span>
 		</div>
 	{/each}
-	<span tabindex={$sources.length + 2} on:click={enableOrDisableAll}>
+	<span tabindex={$sources.length + 1} on:click={enableOrDisableAll}>
 		({shouldEnableAll() ? "enable" : "disable"} all)
 	</span>
 	<label>
-		<input tabindex={$sources.length + 1} bind:value={$unrestrictedSeconds}>
+		<input tabindex={$sources.length + 2} bind:value={$unrestrictedSeconds}>
 		<span>s</span>
 	</label>
 </div>
