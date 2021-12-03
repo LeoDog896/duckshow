@@ -9,12 +9,10 @@ interface ImageData {
 
 export const availableURLs: Writable<ImageData[]> = writable([])
 
-availableURLs.subscribe(newURLs => {
-	newURLs.forEach(newURL => {
-		const image = new Image()
-		image.src = newURL.url
-	})
-})
+availableURLs.subscribe(newURLs => newURLs.forEach(newURL => {
+	const image = new Image()
+	image.src = newURL.url
+}))
 
 const fallbackURL = "https://picsum.photos/500/600.webp?blur=1"
 
@@ -43,7 +41,10 @@ export const randomURLOrCache = async () : Promise<ImageData> => {
 
 	const filteredURLCache = get(availableURLs).filter(it => selectedAnimalNames.includes(it.name))
 
-	if (filteredURLCache.length > 0) return filteredURLCache[0]
+	if (filteredURLCache.length > 0) {
+		availableURLs.set(get(availableURLs).filter((_, i) => i != 0)))
+		return filteredURLCache[0]
+	}
 
 	return randomURL()
 }
