@@ -4,30 +4,22 @@
 
 	function keyPress(event: KeyboardEvent, index: number) {
 		if (event.key == "Enter" && event.shiftKey) {
-			$sources = $sources.map(item => {
-				if (item == $sources[index]) return Object.assign({}, item, { enabled: true })
-				
-				return Object.assign({}, item, { enabled: false })
- 			})
+			$sources = $sources.map(item => Object.assign({}, item, { enabled: $sources[index] }))
 			return
 		}
 
-		if (event.key == "Enter") {
-			$sources[index].enabled = !$sources[index].enabled
-		}
+		if (event.key != "Enter") return
+		
+		$sources[index].enabled = !$sources[index].enabled
+		
 	}
 
-	function shouldEnableAll() {
-		return $sources.filter(it => it.enabled).length != $sources.length
-	}
+	const shouldEnableAll = () => 
+		$sources.filter(it => it.enabled).length != $sources.length
 
-	function enableOrDisableAll() {
-		if (shouldEnableAll()) {
-			$sources = $sources.map(it => Object.assign({}, it, { enabled: true }))
-		} else {
-			$sources = $sources.map(it => Object.assign({}, it, { enabled: false }))
-		}
-	}
+	const enableOrDisableAll = () => 
+		$sources = $sources.map(it => Object.assign({}, it, { enabled: shouldEnableAll() }))
+	
 </script>
 <div id="settings">
 	{#each $sources as source, i}

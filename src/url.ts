@@ -7,16 +7,19 @@ interface ImageData {
 	url: string;
 }
 
-export const availableURLs: Writable<ImageData[]> = writable([])
+export const cachedURLs: Writable<ImageData[]> = writable([])
 
-availableURLs.subscribe(newURLs => newURLs.forEach(newURL => {
+/** Preload all cachedURLs. */
+cachedURLs.subscribe(newURLs => newURLs.forEach(newURL => {
 	const image = new Image()
 	image.src = newURL.url
 }))
 
+/** A generic blurred out image if no images are selected */
 const fallbackURL = "https://picsum.photos/500/600.webp?blur=1"
 
-export const addToCache = async () => availableURLs.set([...get(availableURLs), await randomURL()])
+/** Adds a random url to the cache. */
+export const addToCache = async () => cachedURLs.set([...get(cachedURLs), await randomURL()])
 
 const randomURL = async (): Promise<ImageData> => {
 		
@@ -39,10 +42,10 @@ export const randomURLOrCache = async () : Promise<ImageData> => {
 
 	const selectedAnimalNames = get(sources).filter(it => it.enabled).map(it => it.name)
 
-	const filteredURLCache = get(availableURLs).filter(it => selectedAnimalNames.includes(it.name))
+	const filteredURLCache = get(cachedURLs).filter(it => selectedAnimalNames.includes(it.name))
 
 	if (filteredURLCache.length > 0) {
-		availableURLs.set(get(availableURLs).filter((_, i) => i != 0))
+		cachedURLs.set(get(cachedURLs).filter((_, i) => i != 0))
 		return filteredURLCache[0]
 	}
 
@@ -59,10 +62,10 @@ millis.subscribe(milli => {
 	timeout = setTimeout(refreshImage, milli)
 })
 
-async function refreshImage() {
-	imageData.set(await randomURLOrCache())
-	addToCache()
-	timeout = setTimeout(refreshImage, get(millis))
+function refreshImage() {
+	timeout = setTimeout(async () => {
+		imageData.set(await randomURLOrCache())
+		addToCache()
+		refreshImage()
+	}, get(millis))
 }
-
-refreshImage()
