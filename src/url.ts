@@ -51,10 +51,18 @@ export const randomURLOrCache = async () : Promise<ImageData> => {
 
 export const imageData = writable({ name: ImageType.GENERIC, url: fallbackURL })
 
+let timeout: NodeJS.Timeout | undefined = undefined
+
+millis.subscribe(milli => {
+	if (timeout !== undefined) clearTimeout(timeout)
+
+	timeout = setTimeout(refreshImage, milli)
+})
+
 async function refreshImage() {
 	imageData.set(await randomURLOrCache())
 	addToCache()
-	setTimeout(refreshImage, get(millis))
+	timeout = setTimeout(refreshImage, get(millis))
 }
 
 refreshImage()
