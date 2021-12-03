@@ -16,24 +16,43 @@
 			$sources[index].enabled = !$sources[index].enabled
 		}
 	}
+
+	function shouldEnableAll() {
+		return $sources.filter(it => it.enabled).length != $sources.length
+	}
+
+	function enableOrDisableAll() {
+		if (shouldEnableAll()) {
+			$sources = $sources.map(it => Object.assign({}, it, { enabled: true }))
+		} else {
+			$sources = $sources.map(it => Object.assign({}, it, { enabled: false }))
+		}
+	}
 </script>
 <div id="settings">
-	{#each $sources as animal, i}
-		<div class="animal">
+	{#each $sources as source, i}
+		<div class="source">
 			<span
 				tabindex={i + 1}
-				on:click={() => animal.enabled = !animal.enabled}
+				on:click={() => source.enabled = !source.enabled}
 				on:keydown={event => keyPress(event, i)}
-				class={animal.enabled ? "enabled" : "disabled"}
-			>{animal.name}</span>
+				class={source.enabled ? "enabled" : "disabled"}
+			>{source.name}</span>
 		</div>
 	{/each}
+	<span tabindex={$sources.length + 2} on:click={enableOrDisableAll}>
+		({shouldEnableAll() ? "enable" : "disable"} all)
+	</span>
 	<label>
 		<input tabindex={$sources.length + 1} bind:value={$unrestrictedSeconds}>
 		<span>s</span>
 	</label>
 </div>
 <style lang="scss">
+	span {
+		user-select: none
+	}
+
 	#settings {
 		background: rgba(0, 0, 0, 0.85);
 		box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.52);
@@ -62,7 +81,7 @@
 			width: 2ch;
 		}
 
-		.animal {
+		.source {
 			margin: 10px;
 			display: inline-block;
 			color: white;
