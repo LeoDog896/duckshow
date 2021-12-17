@@ -3,6 +3,10 @@
 	import { sources } from "./sources"
 	import { draggable } from "svelte-drag"
 	import { fade } from 'svelte/transition';
+	import Help from "./Help.svelte"
+	import { getContext } from 'svelte';
+	
+	const { open } = getContext('simple-modal');
 
 	let cursorLastMove = Date.now()
 	$: now = Date.now() || cursorLastMove
@@ -10,26 +14,34 @@
 	setInterval(() => now = Date.now(), 500)
 	$: visible = (now - cursorLastMove) < 5000;
 
+	interface ShiftableEvent {
+		shiftKey: boolean
+	}
+
 	function keyPress(event: KeyboardEvent, index: number) {
-		if (event.key == "Enter" && event.shiftKey) {
+
+		if (event.key != "Enter") return
+
+		press(event, index)
+		
+	}
+
+	function press(event: ShiftableEvent, index: number) {
+		if (event.shiftKey) {
 			const enabled = $sources[index].enabled
 
 			$sources = $sources.map(item => Object.assign({}, item, { enabled }))
 		}
 
-		if (event.key != "Enter") return
-		
 		$sources[index].enabled = !$sources[index].enabled
-		
 	}
 
-	const shouldEnableAll = () => !$sources.every(it => it.enabled)
+	$: shouldEnableAll = !$sources.every(it => it.enabled)
 
 	const updateMove = () => cursorLastMove = Date.now()
 
-	const enableOrDisableAll = () => {
-		$sources = $sources.map(it => Object.assign({}, it, { enabled: shouldEnableAll() }))
-	}
+	const enableOrDisableAll = () => 
+		$sources = $sources.map(it => Object.assign({}, it, { enabled: shouldEnableAll }))
 	
 </script>
 <svelte:body
@@ -43,14 +55,15 @@
 		use:draggable={{bounds: "body", defaultClassDragging: "draggingSettings"}}
 		class="text-white select-none fixed rounded-md
 		top-3 text-center w-9/12 bg-gray-900/25 shadow-md
-		transition-effects hover:bg-gray-900/50
+		transition-effects focus-within:bg-gray-900/50
+		hover:bg-gray-900/50
 		inset-x-0 mx-auto backdrop-blur-md"
 	>
 		{#each $sources as source, i}
-			<div class="cursor-pointer inline-block m-2 border-b-2 border-transparent hover:border-white">
+			<div class="cursor-pointer inline-block m-2 hoverableBorder">
 				<span
 					tabindex={i + 1}
-					on:click={() => source.enabled = !source.enabled}
+					on:click={event => press(event, i)}
 					on:keydown={event => keyPress(event, i)}
 					class="select-none {source.enabled ? "text-white" : "text-gray-300"}"
 				>{source.name}</span>
@@ -60,9 +73,9 @@
 			tabindex={$sources.length + 1} 
 			on:click={enableOrDisableAll}
 			on:keydown={event => { if (event.key == "Enter") enableOrDisableAll() }}
-			class="border-b-2 border-transparent hover:border-white"
+			class="hoverableBorder"
 		>
-			({shouldEnableAll() ? "enable" : "disable"} all)
+			({shouldEnableAll ? "enable" : "disable"} all)
 		</span>
 		<label>
 			<input
@@ -72,10 +85,19 @@
 			>
 			<span>s</span>
 		</label>
+		<span
+			tabindex={$sources.length + 3}
+			class="hoverableBorder"
+			on:click={() => open(Help)}
+		>help</span>
 	</div>
 {/if}
 <style>
 	:global(.draggingSettings) {
 		@apply shadow-lg bg-gray-900/75
+	}
+
+	.hoverableBorder {
+		@apply border-b-2 border-transparent hover:border-white
 	}
 </style>

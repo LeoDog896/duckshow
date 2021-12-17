@@ -26,7 +26,7 @@ const randomURL = async (): Promise<ImageData> => {
 	const selectedImages = get(sources).filter(it => it.enabled)
 
 	if (selectedImages.length == 0) return {
-		url: "https://picsum.photos/500/600.webp?blur=1",
+		url: fallbackURL,
 		name: ImageType.GENERIC
 	}
 
