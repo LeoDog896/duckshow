@@ -35,6 +35,7 @@
 <svelte:body
 	on:click={updateMove}
 	on:mousemove={updateMove}
+	on:keypress={updateMove}
 ></svelte:body>
 {#if visible}
 	<div
