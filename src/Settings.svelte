@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { unrestrictedSeconds } from "./time"
 	import { sources } from "./sources"
+	import { draggable } from "svelte-drag"
 
 	function keyPress(event: KeyboardEvent, index: number) {
 		if (event.key == "Enter" && event.shiftKey) {
@@ -22,9 +23,9 @@
 	}
 	
 </script>
-<div class="fixed rounded-md top-3 text-center w-9/12 bg-gray-900 shadow-lg inset-x-0 mx-auto bg-opacity-75 backdrop-blur-md">
+<div use:draggable={{bounds: "body"}} class="text-white select-none fixed rounded-md top-3 text-center w-9/12 bg-gray-900 shadow-lg inset-x-0 mx-auto bg-opacity-25 backdrop-blur-md">
 	{#each $sources as source, i}
-		<div class="text-white cursor-pointer inline-block m-2">
+		<div class="cursor-pointer inline-block m-2">
 			<span
 				tabindex={i + 1}
 				on:click={() => source.enabled = !source.enabled}
@@ -37,12 +38,11 @@
 		tabindex={$sources.length + 1} 
 		on:click={enableOrDisableAll}
 		on:keydown={event => { if (event.key == "Enter") enableOrDisableAll() }}
-		class="select-none text-white"
 	>
 		({shouldEnableAll() ? "enable" : "disable"} all)
 	</span>
 	<label>
-		<input class="rounded-sm" tabindex={$sources.length + 2} bind:value={$unrestrictedSeconds}>
-		<span class="select-none">s</span>
+		<input class="rounded-sm bg-tran" tabindex={$sources.length + 2} bind:value={$unrestrictedSeconds}>
+		<span>s</span>
 	</label>
 </div>

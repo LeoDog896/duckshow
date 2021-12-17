@@ -17,7 +17,7 @@ specifiers:
   sirv-cli: ^1.0.14
   svelte: ^3.44.2
   svelte-check: ^2.2.10
-  svelte-drag: ^2.3.2
+  svelte-drag: ^2.4.0
   svelte-preprocess: ^4.9.4
   tailwindcss: ~3.0.0
   tslib: ^2.3.1
