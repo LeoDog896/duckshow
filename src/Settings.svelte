@@ -23,9 +23,15 @@
 	}
 	
 </script>
-<div use:draggable={{bounds: "body"}} class="text-white select-none fixed rounded-md top-3 text-center w-9/12 bg-gray-900 shadow-lg inset-x-0 mx-auto bg-opacity-25 backdrop-blur-md">
+<div
+	use:draggable={{bounds: "body", defaultClassDragging: "draggingSettings"}}
+	class="text-white select-none fixed rounded-md
+	top-3 text-center w-9/12 bg-gray-900/25 shadow-md
+	transition-effects hover:bg-gray-900/50
+	inset-x-0 mx-auto backdrop-blur-md"
+>
 	{#each $sources as source, i}
-		<div class="cursor-pointer inline-block m-2">
+		<div class="cursor-pointer inline-block m-2 border-b-2 border-transparent hover:border-white">
 			<span
 				tabindex={i + 1}
 				on:click={() => source.enabled = !source.enabled}
@@ -38,11 +44,21 @@
 		tabindex={$sources.length + 1} 
 		on:click={enableOrDisableAll}
 		on:keydown={event => { if (event.key == "Enter") enableOrDisableAll() }}
+		class="border-b-2 border-transparent hover:border-white"
 	>
 		({shouldEnableAll() ? "enable" : "disable"} all)
 	</span>
 	<label>
-		<input class="rounded-sm bg-tran" tabindex={$sources.length + 2} bind:value={$unrestrictedSeconds}>
+		<input
+			class="rounded-sm bg-transparent w-6"
+			tabindex={$sources.length + 2}
+			bind:value={$unrestrictedSeconds}
+		>
 		<span>s</span>
 	</label>
 </div>
+<style>
+	:global(.draggingSettings) {
+		@apply shadow-lg bg-gray-900/75
+	}
+</style>

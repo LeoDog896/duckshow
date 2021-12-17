@@ -12,6 +12,9 @@ module.exports = {
 		colors: {
 		  svelte: '#ff3e00',
 		},
+		transitionProperty: {
+			effects: "box-shadow, background-color"
+		}
 	  },
 	},
 	plugins: [],
