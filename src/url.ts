@@ -44,6 +44,7 @@ export const randomURLOrCache = async () : Promise<ImageData> => {
 
 	const filteredURLCache = get(cachedURLs).filter(it => selectedAnimalNames.includes(it.name))
 
+	// We found an element in the cache! Remove it and continue.
 	if (filteredURLCache.length > 0) {
 		cachedURLs.set(get(cachedURLs).filter((_, i) => i != 0))
 		return filteredURLCache[0]
@@ -52,7 +53,7 @@ export const randomURLOrCache = async () : Promise<ImageData> => {
 	return randomURL()
 }
 
-export const imageData = writable({ name: ImageType.GENERIC, url: fallbackURL })
+export const imageData: Writable<ImageData> = writable({ name: ImageType.GENERIC, url: fallbackURL })
 
 let timeout: NodeJS.Timeout | undefined = undefined
 
