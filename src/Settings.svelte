@@ -22,7 +22,7 @@
 	}
 	
 </script>
-<div class="fixed rounded-md text-center w-9/12 bg-gray-900 shadow-lg inset-x-0 mx-auto">
+<div class="fixed rounded-md top-3 text-center w-9/12 bg-gray-900 shadow-lg inset-x-0 mx-auto bg-opacity-75 backdrop-blur-md">
 	{#each $sources as source, i}
 		<div class="text-white cursor-pointer inline-block m-2">
 			<span
